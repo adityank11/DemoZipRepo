@@ -30,12 +30,15 @@ pipeline {
             steps {
                 dir('JarFileRepo') {
                     script {
-                    // Capture JAR file name into an environment variable
-                    bat """
-                    for /f %%i in ('dir /b target\\*.jar') do set JAR_NAME=%%i
-                    echo Found JAR: %JAR_NAME%
-                    call powershell -Command "Compress-Archive -Path 'target\\%JAR_NAME%', 'monitor.xml' -DestinationPath '../build_package.zip'"
-                    """
+                    bat '''
+                    for /f %%i in ('dir /b target\\*.jar') do (
+                    copy target\\%%i .
+                    copy pom.xml .
+                    tar -a -c -f ..\\build_package.zip %%i pom.xml
+                    del %%i
+                    del pom.xml
+                   )
+                   '''
                   }
                 }
             }
