@@ -31,7 +31,9 @@ pipeline {
                 dir('JarFileRepo') {
                     script {
                         def jarPath = bat(script: 'for /f %%i in (\'dir /b target\\*.jar\') do @echo %%i', returnStdout: true).trim()
-                        bat "powershell Compress-Archive -Path target\\${jarPath},monitor.xml -DestinationPath ..\\${ZIP_NAME}"
+                        powershell """
+                                Compress-Archive -Path "target\\${jarPath}","monitor.xml" -DestinationPath "..\\${ZIP_NAME}"
+                        """
                     }
                 }
             }
