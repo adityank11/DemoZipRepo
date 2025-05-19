@@ -27,6 +27,7 @@ pipeline {
         }
 
         stage('Package ZIP') {
+            steps {
                 dir('JarFileRepo') {
                     script {
                     // Capture JAR file name into an environment variable
@@ -35,6 +36,7 @@ pipeline {
                     echo Found JAR: %JAR_NAME%
                     call powershell -Command "Compress-Archive -Path 'target\\%JAR_NAME%', 'monitor.xml' -DestinationPath '../build_package.zip'"
                     """
+                  }
                 }
             }
         }
