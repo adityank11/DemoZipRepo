@@ -58,8 +58,8 @@ pipeline {
                     bat "copy JarFileRepo\\${ZIP_NAME} DemoZipRepo\\"
                     dir('DemoZipRepo') {
                         bat '''
-                            git config user.email "jenkins@example.com"
-                            git config user.name "jenkins"
+                            git config user.email "kelkaradityan17@gmaail.com"
+                            git config user.name "adityank11"
                             git add .
                             git commit -m "Add zipped build artifact"
                             git push origin main
