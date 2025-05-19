@@ -36,7 +36,7 @@ pipeline {
                       copy /Y pom.xml temp_pom.xml  
                       tar -a -c -f ..\\build_package.zip temp_%%i temp_pom.xml  
                       del temp_%%i  
-                     del temp_pom.xml
+                      del temp_pom.xml
                       )
                       '''
                   }
@@ -55,7 +55,7 @@ pipeline {
         stage('Commit ZIP to Repo B') {
             steps {
                 script {
-                    bat "copy build_package.zip DemoZipRepo\"
+                    bat "copy build_package.zip DemoZipRepo"
                     dir('DemoZipRepo') {
                         bat '''
                             git config user.email "kelkaradityan17@gmail.com"
