@@ -57,3 +57,9 @@ pipeline {
                             git commit -m "Add zipped build artifact"
                             git push origin main
                         '''
+                    }
+                }
+            }
+        }
+    }
+}
