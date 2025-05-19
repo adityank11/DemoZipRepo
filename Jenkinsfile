@@ -12,8 +12,8 @@ pipeline {
         stage('Clone Repo A') {
             steps {
                 dir('JarFileRepo') {
-                    git url: "${REPO_A}", credentialsId: "${CREDENTIALS_ID}"
-                    bat 'dir' 
+                    git branch: 'main', url: "${REPO_A}", credentialsId: "${CREDENTIALS_ID}"
+                    bat 'dir'
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline {
         stage('Clone Repo B') {
             steps {
                 dir('DemoZipRepo') {
-                    git url: "${REPO_B}", credentialsId: "${CREDENTIALS_ID}"
+                    git branch: 'main', url: "${REPO_B}", credentialsId: "${CREDENTIALS_ID}"
                 }
             }
         }
@@ -57,9 +57,3 @@ pipeline {
                             git commit -m "Add zipped build artifact"
                             git push origin main
                         '''
-                    }
-                }
-            }
-        }
-    }
-}
