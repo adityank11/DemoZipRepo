@@ -55,10 +55,10 @@ pipeline {
         stage('Commit ZIP to Repo B') {
             steps {
                 script {
-                    bat "copy JarFileRepo\\${ZIP_NAME} DemoZipRepo\\"
+                    bat "copy build_package.zip DemoZipRepo\"
                     dir('DemoZipRepo') {
                         bat '''
-                            git config user.email "kelkaradityan17@gmaail.com"
+                            git config user.email "kelkaradityan17@gmail.com"
                             git config user.name "adityank11"
                             git add .
                             git commit -m "Add zipped build artifact"
