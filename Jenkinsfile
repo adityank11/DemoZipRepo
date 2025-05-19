@@ -32,7 +32,7 @@ pipeline {
                 dir('repo-a') {
                     script {
                         def targetDir = sh(script: "ls -d target/", returnStdout: true).trim()
-                        sh "zip -j ../${ZIP_NAME} ${targetDir}/*.jar monitor.xml"
+                        sh "zip -j ../${ZIP_NAME} ${targetDir}/*.jar pom.xml"
                     }
                 }
             }
