@@ -27,16 +27,14 @@ pipeline {
         }
 
         stage('Package ZIP') {
-            steps {
                 dir('JarFileRepo') {
                     script {
-                        def jarPath = bat(script: 'for /f %%i in (\'dir /b target\\*.jar\') do @echo %%i', returnStdout: true).trim()
-                        echo "Found JAR: ${jarPath}"
-                        bat """
-                            powershell -Command ^
-                            Compress-Archive -Path 'target\\${jarPath}','monitor.xml' -DestinationPath '..\\${ZIP_NAME}'
-                       """
-                    }
+                    // Capture JAR file name into an environment variable
+                    bat """
+                    for /f %%i in ('dir /b target\\*.jar') do set JAR_NAME=%%i
+                    echo Found JAR: %JAR_NAME%
+                    call powershell -Command "Compress-Archive -Path 'target\\%JAR_NAME%', 'monitor.xml' -DestinationPath '../build_package.zip'"
+                    """
                 }
             }
         }
