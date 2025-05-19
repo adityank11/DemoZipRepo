@@ -13,6 +13,7 @@ pipeline {
             steps {
                 dir('JarFileRepo') {
                     git url: "${REPO_A}", credentialsId: "${CREDENTIALS_ID}"
+                    bat 'dir' 
                 }
             }
         }
