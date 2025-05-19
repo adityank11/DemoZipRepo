@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Clone Repo A') {
             steps {
-                dir('repo-a') {
+                dir('JarFileRepo') {
                     git url: "${REPO_A}", credentialsId: "${CREDENTIALS_ID}"
                 }
             }
@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                dir('repo-a') {
+                dir('JarFileRepo') {
                     bat 'mvn clean package'
                 }
             }
@@ -27,7 +27,7 @@ pipeline {
 
         stage('Package ZIP') {
             steps {
-                dir('repo-a') {
+                dir('JarFileRepo') {
                     script {
                         def jarPath = bat(script: 'for /f %%i in (\'dir /b target\\*.jar\') do @echo %%i', returnStdout: true).trim()
                         bat "powershell Compress-Archive -Path target\\${jarPath},monitor.xml -DestinationPath ..\\${ZIP_NAME}"
@@ -38,7 +38,7 @@ pipeline {
 
         stage('Clone Repo B') {
             steps {
-                dir('repo-b') {
+                dir('DemoZipRepo') {
                     git url: "${REPO_B}", credentialsId: "${CREDENTIALS_ID}"
                 }
             }
@@ -47,8 +47,8 @@ pipeline {
         stage('Commit ZIP to Repo B') {
             steps {
                 script {
-                    bat "copy repo-a\\${ZIP_NAME} repo-b\\"
-                    dir('repo-b') {
+                    bat "copy JarFileRepo\\${ZIP_NAME} DemoZipRepo\\"
+                    dir('DemoZipRepo') {
                         bat '''
                             git config user.email "jenkins@example.com"
                             git config user.name "jenkins"
