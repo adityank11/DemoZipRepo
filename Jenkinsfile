@@ -30,15 +30,15 @@ pipeline {
             steps {
                 dir('JarFileRepo') {
                     script {
-                    bat '''
-                    for /f %%i in ('dir /b target\\*.jar') do (
-                    copy target\\%%i .
-                    copy pom.xml .
-                    tar -a -c -f ..\\build_package.zip %%i pom.xml
-                    del %%i
-                    del pom.xml
-                   )
-                   '''
+                      bat '''
+                      for /f %%i in ('dir /b target\\*.jar') do (
+                      copy /Y target\\%%i temp_%%i  
+                      copy /Y pom.xml temp_pom.xml  
+                      tar -a -c -f ..\\build_package.zip temp_%%i temp_pom.xml  
+                      del temp_%%i  
+                     del temp_pom.xml
+                      )
+                      '''
                   }
                 }
             }
