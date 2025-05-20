@@ -55,17 +55,20 @@ pipeline {
         stage('Commit ZIP to Repo B') {
             steps {
                 script {
-                    bat "copy build_package.zip DemoZipRepo"
-                    dir('DemoZipRepo') {
-                        bat ''' 
-                            set "PATH=C:\\Program Files\\Git\\cmd;%PATH%"
-                            git config user.email "kelkaradityan17@gmail.com"
-                            git config user.name "adityank11"
-                            git add .
-                            git commit -m "Add zipped build artifact"
-                            git push origin main
-                        '''
-                    }
+                     // Move ZIP into Repo B folder
+                bat "copy build_package.zip DemoZipRepo"
+
+                // Commit and push with credentials
+                dir('DemoZipRepo') {
+                    bat '''
+                        set "PATH=C:\\Program Files\\Git\\cmd;%PATH%"
+                        git config user.email "kelkaradityan17@gmail.com"
+                        git config user.name "adityank11"
+                        git remote set-url origin https://%GIT_USERNAME%:%GIT_PASSWORD%@github.com/adityank11/DemoZipRepo.git
+                        git add .
+                        git commit -m "Add zipped build artifact" || echo No changes to commit
+                        git push origin main --verbose
+                    '''
                 }
             }
         }
