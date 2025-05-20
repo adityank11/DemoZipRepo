@@ -69,7 +69,7 @@ pipeline {
                                 git config user.email "kelkaradityan17@gmail.com"
                                 git config user.name "adityank11"
                                 git remote set-url origin https://%GIT_USERNAME%:%GIT_PASSWORD%@github.com/adityank11/DemoZipRepo.git
-                                git add ${ZIP_NAME}
+                                git add .
                                 git commit -m "Add zipped build artifact" || echo No changes to commit
                                 git push origin main --verbose
                             '''
