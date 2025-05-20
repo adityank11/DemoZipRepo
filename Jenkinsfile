@@ -57,7 +57,8 @@ pipeline {
                 script {
                     bat "copy build_package.zip DemoZipRepo"
                     dir('DemoZipRepo') {
-                        bat '''
+                        bat ''' 
+                            set "PATH=C:\\Program Files\\Git\\cmd;%PATH%"
                             git config user.email "kelkaradityan17@gmail.com"
                             git config user.name "adityank11"
                             git add .
