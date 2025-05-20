@@ -30,16 +30,16 @@ pipeline {
             steps {
                 dir('JarFileRepo') {
                     script {
-                      bat '''
-                      for /f %%i in ('dir /b target\\*.jar') do (
-                      copy /Y target\\%%i temp_%%i  
-                      copy /Y pom.xml temp_pom.xml  
-                      tar -a -c -f ..\\build_package.zip temp_%%i temp_pom.xml  
-                      del temp_%%i  
-                      del temp_pom.xml
-                      )
-                      '''
-                  }
+                        bat """
+                        for /f %%i in ('dir /b target\\*.jar') do (
+                            copy /Y target\\%%i temp_%%i  
+                            copy /Y pom.xml temp_pom.xml  
+                            tar -a -c -f ..\\${ZIP_NAME} temp_%%i temp_pom.xml  
+                            del temp_%%i  
+                            del temp_pom.xml
+                        )
+                        """
+                    }
                 }
             }
         }
@@ -54,21 +54,26 @@ pipeline {
 
         stage('Commit ZIP to Repo B') {
             steps {
-                script {
-                     // Move ZIP into Repo B folder
-                bat "copy build_package.zip DemoZipRepo"
+                withCredentials([usernamePassword(credentialsId: "${CREDENTIALS_ID}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    script {
+                        // Delete any existing ZIP file to avoid conflicts
+                        bat "del DemoZipRepo\\${ZIP_NAME} 2>nul"
+                        // Copy new ZIP to Repo B
+                        bat "copy ${ZIP_NAME} DemoZipRepo"
 
-                // Commit and push with credentials
-                dir('DemoZipRepo') {
-                    bat '''
-                        set "PATH=C:\\Program Files\\Git\\cmd;%PATH%"
-                        git config user.email "kelkaradityan17@gmail.com"
-                        git config user.name "adityank11"
-                        git remote set-url origin https://%GIT_USERNAME%:%GIT_PASSWORD%@github.com/adityank11/DemoZipRepo.git
-                        git add .
-                        git commit -m "Add zipped build artifact" || echo No changes to commit
-                        git push origin main --verbose
-                    '''
+                        // Commit and push
+                        dir('DemoZipRepo') {
+                            bat '''
+                                set "PATH=C:\\Program Files\\Git\\cmd;%PATH%"
+                                git config user.email "kelkaradityan17@gmail.com"
+                                git config user.name "adityank11"
+                                git remote set-url origin https://%GIT_USERNAME%:%GIT_PASSWORD%@github.com/adityank11/DemoZipRepo.git
+                                git add .
+                                git commit -m "Add zipped build artifact" || echo No changes to commit
+                                git push origin main --verbose
+                            '''
+                        }
+                    }
                 }
             }
         }
